@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Anggota_model;
 use Validator;
+use Auth;
 
 
 class AnggotaController extends Controller
 {
     public function store(Request $req)
     {
+        if(Auth::user()->level=="admin"){
         $validator=Validator::make($req->all(),
             [
                 'nama_anggota'=>'required',
@@ -25,7 +27,6 @@ class AnggotaController extends Controller
                 'alamat'=>$req->alamat,
                 'tlp'=>$req->tlp
         ]);
-        if($simpan){
             return Response()->json(['status'=>1]);
         } else {
             return Response()->json(['status'=>0]);
@@ -34,6 +35,7 @@ class AnggotaController extends Controller
 
     public function update($id,Request $req)
     {
+        if(Auth::user()->level=="admin"){
         $validator=Validator::make($req->all(),
         [
                 'nama_anggota'=>'required',
@@ -48,25 +50,31 @@ class AnggotaController extends Controller
             'alamat'=>$req->alamat,
             'tlp'=>$req->tlp
         ]);
-        if($ubah){
             return Response()->json(['status'=>1]);
         } else {
             return Response()->json(['status'=>0]);
         }
     }
     public function destroy($id)
-    {
+    {   
+        if(Auth::user()->level=="admin"){
         $hapus=Anggota_model::where('id',$id)->delete();
-        if($hapus){
             return Response()->json(['status'=>1]);
         } else {
             return Response()->json(['status'=>0]);
         }
     }
 
-    // public function tampil_anggota()
-    // {
-    //     $data_siswa=Anggota_model::join('kelas','kelas.id','siswa.id_kelas')->get();
-    //     return Response()->json($data_siswa);
-    // }
+    public function tampil()
+
+    {
+        if(Auth::user()->level=="admin"){
+            $dt_anggota=Anggota_model::get();
+            return response()->json($dt_anggota);
+        }else{
+            return response()->json(['status'=>'anda bukan admin']);
+
+        }
+    }
+
 }

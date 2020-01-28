@@ -21,3 +21,13 @@ Route::post('login', 'PetugasController@login');
 Route::get('/', function(){
     return Auth::user()->alamat;
 })->middleware('jwt.verify');
+
+Route::post('buku', 'BukuController@store')->middleware('jwt.verify');
+Route::put('buku/{id}', 'BukuController@update')->middleware('jwt.verify');
+Route::get('tampil_buku', 'BukuController@tampil')->middleware('jwt.verify');
+Route::delete('hapus_buku/{id}', 'BukuController@destroy')->middleware('jwt.verify');
+
+Route::post('anggota', 'AnggotaController@store')->middleware('jwt.verify');
+Route::put('anggota/{id}', 'AnggotaController@update')->middleware('jwt.verify');
+Route::get('tampil_anggota', 'AnggotaController@tampil')->middleware('jwt.verify');
+Route::delete('hapus_anggota/{id}', 'AnggotaController@destroy')->middleware('jwt.verify');
